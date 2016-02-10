@@ -139,11 +139,13 @@ In the example above the plugin is listening to the `ENTITY_UPDATED` and `ENTITY
 | `entity`                           | Table  | The most recent updated entity, or the entity deleted or created.
 | `old_entity`                       | Table  | Only for update events, the old version of the entity.
 
-The entities being transmitted in the `entity` and `old_entity` properties do not have all the fields defined in the schema, but only a subset. This is required because every event is sent in a UDP packet with a payload size limit of 512 bytes. This subset is being returned by the `marshall_event` function in the schema, that you **must** implement.
+The entities being transmitted in the `entity` and `old_entity` properties do not have all the fields defined in the schema, but only a subset. This is required because every event is sent in a UDP packet with a payload size limit of 512 bytes. This subset is being returned by the `marshall_event` function in the schema, that you can optionally implement.
 
 #### marshall_event
 
-This function serializes the custom entity to a minimal version that only includes the fields we will later need to use in `hooks.lua`. For example:
+This function serializes the custom entity to a minimal version that only includes the fields we will later need to use in `hooks.lua`. If `marshall_event` is not implememented, by default Kong does not send any entity field value along with the event.
+
+For example:
 
 ```lua
 -- daos.lua
@@ -163,10 +165,10 @@ local SCHEMA = {
 }
 ```
 
-In the example above the custom entity provides a `marshall_event` function that returns an object without its `creation_date`. In our hooks we don't need `creation_date` to invalidate the entity, so we don't care to propagate it in the event. The `t` table in the arguments is the original object with all its fields.
+In the example above the custom entity provides a `marshall_event` function that returns an object with its `id`, `consumer_id` and `apikey` fields. In our hooks we don't need `creation_date` to invalidate the entity, so we don't care to propagate it in the event. The `t` table in the arguments is the original object with all its fields.
 
 <div class="alert alert-warning">
-  <strong>Note:</strong> The JSON serialization of the Lua table that's being returned must not exceed 60kb, in order to fit the entire event in one UDP packet (which allows 65kb, but that also includes the `collection` property). Failure to meet this contraints will prevent invalidation events from being propagated, thus creating inconsistencies.
+  <strong>Note:</strong> The JSON serialization of the Lua table that's being returned must not exceed 512 bytes, in order to fit the entire event in one UDP packet. Failure to meet this contraints will prevent invalidation events from being propagated, thus creating inconsistencies.
 </div>
 
 ---
