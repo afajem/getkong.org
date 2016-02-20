@@ -29,6 +29,9 @@
     - text: Proxy reference
       url: /proxy
 
+    - text: Network &amp; Firewall
+      url: /network
+
     - text: Public Lua API reference
       url: /lua-reference/
 
