@@ -21,7 +21,6 @@ A Kong cluster can be created in one datacenter, or in multiple datacenters, in 
   - [Asynchronous join on concurrent node starts][7a]
   - [Automatic cache purge on join][7b]
   - [Node failures][7c]
-- 8. [Problems and bug reports][8]
 
 [1]: #1-introduction
 [2]: #2-how-does-kong-clustering-work
@@ -136,14 +135,9 @@ To remove a `failed` node from the cluster, use the [`kong cluster force-leave`]
 
 The node data will persist for 1 hour in the datastore in case the node crashes, after which it will be removed from the datastore and new nodes will stop trying auto-joining it.
 
-## 8. Problems and bug reports
-
-Clustering is a new feature introduced with Kong >= 0.6.x - if you experience any problem please contact us through our [Community Channels][community-channels].
-
 [cluster_listen]: /docs/{{page.kong_version}}/configuration/#cluster_listen
 [cluster_listen_rpc]: /docs/{{page.kong_version}}/configuration/#cluster_listen_rpc
 [cluster]: /docs/{{page.kong_version}}/configuration/#cluster
 [cli-cluster]: /docs/{{page.kong_version}}/cli/#cluster
 [cluster-api-status]: /docs/{{page.kong_version}}/admin-api/#retrieve-cluster-status
 [cluster-api-remove]: /docs/{{page.kong_version}}/admin-api/#forcibly-remove-a-node
-[community-channels]: /community
